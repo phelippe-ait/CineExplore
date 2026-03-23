@@ -1,29 +1,18 @@
-import * as React from 'react';
-import { View, Text } from 'react-native';
-import { createStaticNavigation } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Login from '../app';
-import SignUp from '../app/signup';
+import { Tabs } from 'expo-router';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
-function HomeScreen() {
+export default function TabLayout() {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Home Screen</Text>
-    </View>
+    <Tabs>
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: 'Home',
+          tabBarIcon: ({ color }) => <MaterialIcons size={28} name="house.fill" color={color} />,
+        }}
+      />
+      <Tabs.Screen name="feed" options={{ title: 'Feed' }} />
+      <Tabs.Screen name="profile" options={{ title: 'Profile' }} />
+    </Tabs>
   );
-}
-
-const RootStack = createNativeStackNavigator({
-    initialRouteName: "Login",
-  screens: {
-    Home: HomeScreen,
-    Login: Login,
-    SignUp: SignUp,
-  },
-});
-
-const Navigation = createStaticNavigation(RootStack);
-
-export default function App() {
-  return <Navigation />;
 }

@@ -1,18 +1,35 @@
 import { Link, useRouter } from "expo-router";
 import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, StyleSheet, Text, TextInput, View } from "react-native";
+import { signIn } from "../auth/AuthManager";
 import { Button } from "../components/Button";
+import { colours } from "../styles/colours";
 
 export default function Login() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // get the router object for navigation
   const router = useRouter();
 
-  const handleSignIn = () => {
-    // TODO: wire up authentication
-    console.log("sign in", { username, password });
+  const handleSignIn = async () => {
+    if (!email.trim() || !password.trim()) {
+      Alert.alert("Missing fields", "Please fill in email and password.");
+      return;
+    }
+
+    try {
+      // TODO: Implement actual sign-in logic
+      setLoading(true);
+      await signIn(email, password);
+      router.replace("/home");
+    } catch (error: any) {
+      Alert.alert("Sign in failed", error.message || "Something went wrong.");
+      console.error("Error signing in:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSignUp = () => {
@@ -35,8 +52,8 @@ export default function Login() {
         <TextInput
           style={styles.input}
           placeholder="you@example.com"
-          value={username}
-          onChangeText={setUsername}
+          value={email}
+          onChangeText={setEmail}
           autoCapitalize="none"
         />
 
@@ -48,7 +65,10 @@ export default function Login() {
           secureTextEntry
         />
 
-        <Button text="Sign In" onPress={handleSignIn} />
+        <Button
+          text={loading ? "Signing In..." : "Sign In"}
+          onPress={handleSignIn}
+        />
 
         <Link style={styles.forgotText} href="/forgotPassword">
           Forgot password?
@@ -99,17 +119,17 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
   },
   input: {
-    width: "100%",
+    width: "90%",
     padding: 12,
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 6,
     marginBottom: 15,
-    color: "#ffffffc1",
-    backgroundColor: "#484444",
+    color: colours.textPrimary,
+    backgroundColor: colours.inputBackground,
   },
   forgotText: {
-    color: "#919191",
+    color: colours.textSecondary,
     marginTop: 8,
   },
   signupContainer: {
@@ -122,10 +142,10 @@ const styles = StyleSheet.create({
   },
   signupText: {
     fontSize: 16,
-    color: "#919191",
+    color: colours.textSecondary,
   },
   signupButton: {
-    color: "#CF3535",
+    color: colours.accent,
     fontWeight: "700",
   },
 });

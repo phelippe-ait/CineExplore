@@ -1,4 +1,5 @@
 import { Pressable, StyleProp, StyleSheet, Text, ViewStyle } from "react-native";
+import { colours, Colours } from "../styles/colours";
 
 interface ButtonProps {
     text: string;
@@ -16,16 +17,16 @@ export function Button({ text, style, onPress }: ButtonProps) {
 
 const styles = StyleSheet.create({
     button: {
-        backgroundColor: "#CF3535",
+        backgroundColor: colours.buttonBackground,
         padding: 10,
         marginVertical: 10,
         borderWidth: 1,
-        borderColor: "#2c465dff",
+        borderColor: colours.buttonBackground,
         borderRadius: 5,
         boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
     },
     buttonText: {
-        color: "#fff",
+        color: colours.buttonText,
         fontSize: 16,
         fontWeight: "bold",
     },
